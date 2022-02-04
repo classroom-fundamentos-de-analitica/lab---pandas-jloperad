@@ -168,11 +168,11 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    a = tbl0
-    b = a.groupby('_c1').agg({'_c2': lambda x: sorted(list(x))})
-    for index, row in b.iterrows():
+    tb = tbl0
+    res = tb.groupby('_c1').agg({'_c2': lambda x: sorted(list(x))})
+    for i, row in res.iterrows():
         row['_c2'] = ":".join([str(int) for int in row['_c2']])
-    return b
+    return res
 
 print(pregunta_10())
 
