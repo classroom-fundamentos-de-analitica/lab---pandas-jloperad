@@ -95,7 +95,7 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    
+    return list(pd.Series(tbl1['_c4'].unique()).str.upper().sort_values())
 
 
 def pregunta_07():
@@ -174,6 +174,7 @@ def pregunta_10():
         index = "_c1",
         columns = "nam",
         values = "_c0")
+    
     return res
 
 
@@ -193,7 +194,14 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    tb = tbl1
+    res = tb.groupby('_c0').agg({'_c4': lambda x: sorted(list(x))})
+    
+    for index, row in res.iterrows():
+        row['_c4'] = ",".join([str(int) for int in row['_c4']])
+        
+    res.insert(0, '_c0', range(0, 40))
+    return res
 
 
 def pregunta_12():
@@ -211,7 +219,15 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    tl = tbl2
+    tl['_c5'] = tl['_c5a'] + ':' + tl['_c5b'].astype(str)
+    res = tl.groupby('_c0').agg({'_c5': lambda x: sorted(x)})
+    
+    for index, row in res.iterrows():
+        row['_c5'] = ",".join([str(int) for int in row['_c5']])
+        
+    res.insert(0, '_c0', range(0, 40))
+    return res
 
 
 def pregunta_13():
@@ -228,4 +244,9 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+    res = pd.merge(
+        tbl0,
+        tbl2,
+        how="outer",
+    )
+    return res.groupby('_c1')['_c5b'].sum()
