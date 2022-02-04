@@ -168,13 +168,10 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    res = tbl0.copy()
-    res['nam'] = ["_c0","_c1"] * 20
-    res = res.pivot(
-        index = "_c1",
-        columns = "nam",
-        values = "_c0")
-    
+    tb = tbl0
+    res = tb.groupby('_c1').agg({'_c2': lambda x: sorted(list(x))})
+    for index, row in res.iterrows():
+        row['_c2'] = ":".join([str(int) for int in row['_c2']])
     return res
 
 
